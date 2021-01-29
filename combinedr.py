@@ -1,4 +1,4 @@
-from ROOT import TCanvas, TTree, TLatex, TH1F, TFile
+from ROOT import TCanvas, TTree, TH1F, TFile
 
 c=TCanvas()
 
