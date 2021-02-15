@@ -1,6 +1,6 @@
 from ROOT import TFile, TTree, TGraph, TCanvas, TLatex, TH1F, TGraphErrors, TLegend
 
-f=TFile.Open("radion_bias.root")
+f=TFile.Open("graviton_bias.root")
 t=f.Get("tree")
 
 c=TCanvas("c","c",900,900)
@@ -28,25 +28,24 @@ for i in range(3):
     list_graph[i].SetMarkerStyle(markers[i])
     list_graph[i].SetLineWidth(2)
     list_graph[i].SetMarkerSize(2)
-j=0    
+j=[0,0,0]    
 for i in range(0,45,3):
     flag=0
-    for k in range(2):
-        t.GetEntry(i+k)
-        if(abs(t.bias)>0.15):
-            flag=1
-    if (flag==1): continue
     t.GetEntry(i)
-    list_graph[0].SetPoint(j, t.mass, t.bias)
-    list_graph[0].SetPointError(j, 0, t.error)
+    if(abs(t.bias)<0.15):
+        list_graph[0].SetPoint(j[0], t.mass, t.bias)
+        list_graph[0].SetPointError(j[0], 0, t.error)
+        j[0]+=1
     t.GetEntry(i+1)
-    list_graph[1].SetPoint(j, t.mass, t.bias)
-    list_graph[1].SetPointError(j, 0, t.error)
+    if(abs(t.bias)<0.15):
+        list_graph[1].SetPoint(j[1], t.mass, t.bias)
+        list_graph[1].SetPointError(j[1], 0, t.error)
+        j[1]+=1
     t.GetEntry(i+2)
-    list_graph[2].SetPoint(j, t.mass, t.bias)
-    list_graph[2].SetPointError(j, 0, t.error)
-    j+=1
-    
+    if(abs(t.bias)<0.15):
+        list_graph[2].SetPoint(j[2], t.mass, t.bias)
+        list_graph[2].SetPointError(j[2], 0, t.error)
+        j[2]+=1
     
 l=TLegend(0.7, 0.75, 0.9, 0.9)
 l.SetFillStyle(-1)
@@ -63,4 +62,4 @@ l.Draw()
 list_graph[0].GetYaxis().SetRangeUser(-0.3, 0.3)
 list_graph[0].GetYaxis().SetLimits(-0.3, 0.6)
 
-c.SaveAs("radion_bias_plot.root")
+c.SaveAs("graviton_bias_plot.root")
